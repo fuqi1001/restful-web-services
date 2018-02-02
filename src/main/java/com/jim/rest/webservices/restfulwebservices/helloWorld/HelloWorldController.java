@@ -1,6 +1,10 @@
 package com.jim.rest.webservices.restfulwebservices.helloWorld;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Locale;
 
 @RestController
 public class HelloWorldController {
@@ -19,5 +23,17 @@ public class HelloWorldController {
     @GetMapping(path = "/hello-world/path-variable/{name}")
     public HelloWorldBean helloWorldVariable(@PathVariable String name) {
         return new HelloWorldBean(String.format("Hello World, %s", name));
+    }
+
+
+    @Autowired
+    private MessageSource messageSource;
+
+
+    //test internationalization
+
+    @GetMapping(path = "/hello-world-internationalized")
+    public String helloWorldInternationalized(@RequestHeader(name="Accept-Language", required=false) Locale locale) {
+        return messageSource.getMessage("good.morning.message", null, locale);
     }
 }

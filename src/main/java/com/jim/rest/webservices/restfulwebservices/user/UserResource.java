@@ -2,6 +2,10 @@ package com.jim.rest.webservices.restfulwebservices.user;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Resource;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -25,11 +29,18 @@ public class UserResource {
 
     //GET {id} User
     @GetMapping("/users/{id}")
-    public User retrieveUser(@PathVariable int id) {
+    public Resource<User> retrieveUser(@PathVariable int id) {
         User user =  userDAOService.findOne(id);
         if(user == null)
             throw new UserNotFoundException("no id-" + id);
-        return user;
+
+        // HATEOAS
+        Resource<User> resource = new Resource<User>(user);
+        ControllerLinkBuilder linkTo =
+            linkTo(methodOn(this.getClass()).retrieveAllUsers());
+        resource.add(linkTo.withRel("all-users"));
+
+        return resource;
     }
 
     //POST new User
