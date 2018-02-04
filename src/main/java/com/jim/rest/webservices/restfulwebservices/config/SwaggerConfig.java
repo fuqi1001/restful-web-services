@@ -3,6 +3,8 @@ package com.jim.rest.webservices.restfulwebservices.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -19,10 +21,15 @@ public class SwaggerConfig {
             new HashSet<String>(Arrays.asList("application/json",
                     "application/xml"));
 
+    public static final Contact DEFAULT_CONTACT = new Contact(
+            "Ranga Karanam", "http://www.in28minutes.com", "in28minutes@gmail.com");
+
+
 
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
+
                 .produces(DEFAULT_PRODUCES_AND_CONSUMES)
                 .consumes(DEFAULT_PRODUCES_AND_CONSUMES);
     }
